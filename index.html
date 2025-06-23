@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="description"
+        content="4D Reconstruction From Monocular Inputs.">
+  <meta name="keywords" content="Gaussian Splatting, monocular">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ViDAR: Video Diffusion-Aware 4D Reconstruction From Monocular Inputs</title>
+
+  <link rel="stylesheet" href="static/css/bootstrap-4.4.1.css">
+
+  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro"
+        rel="stylesheet">
+
+  <link rel="stylesheet" href="static/css/bulma.min.css">
+  <link rel="stylesheet" href="static/css/fontawesome.all.min.css">
+  <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+  <link rel="stylesheet" href="static/css/index.css">
+  <link rel="icon" href="assets/other/movie-frame.png">
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script defer src="static/js/fontawesome.all.min.js"></script>
+  <script src="static/js/video_comparison.js"></script>
+  <script src="static/js/event_handler.js"></script>
+</head>
+<body>
+
+<nav class="navbar" role="navigation" aria-label="main navigation">
+  <div class="navbar-brand">
+    <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
+      <span aria-hidden="true"></span>
+      <span aria-hidden="true"></span>
+      <span aria-hidden="true"></span>
+    </a>
+  </div>
+  <div class="navbar-menu">
+    <div class="navbar-start" style="flex-grow: 1; justify-content: center;">
+      <a class="navbar-item" href="https://michaal94.github.io" target="_blank">
+      <span class="icon">
+          <i class="fas fa-home"></i>
+      </span>
+      </a>
+
+      <div class="navbar-item has-dropdown is-hoverable">
+        <a class="navbar-link">
+          More Research
+        </a>
+        <div class="navbar-dropdown">
+          <a class="navbar-item" href="https://charge-benchmark.github.io" target="_blank">
+            Charge
+          </a>
+          <a class="navbar-item" href="https://arxiv.org/abs/2409.15041" target="_blank">
+            Sparse Neural Rendering Challenge
+          </a>
+          <a class="navbar-item" href="https://arxiv.org/abs/2312.13308v2" target="_blank">
+            SWinGS
+          </a>
+          <a class="navbar-item" href="https://sib1.github.io/projects/roguenerf/" target="_blank">
+            RoGUENeRF
+          </a>
+          <a class="navbar-item" href="https://arxiv.org/abs/2312.02902" target="_blank">
+            HeadGaS
+          </a>
+          <a class="navbar-item" href="https://arxiv.org/abs/2311.17113" target="_blank">
+            HuGS
+          </a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</nav>
+
+
+<section class="hero">
+  <div class="hero-body">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered">
+        <div class="column has-text-centered">
+          <h1 class="title is-1 publication-title">ViDAR: Video Diffusion-Aware 4D Reconstruction From Monocular Inputs</h1>
+          <div class="is-size-5 publication-authors">
+            <span class="author-block">
+              <a href="https://michaal94.github.io" target="_blank">Michal Nazarczuk<sup>1</sup>*</a>,</span>
+            <span class="author-block">
+              <a href="https://sib1.github.io" target="_blank">Sibi Catley-Chandar<sup>1,2</sup>*</a>,</span>
+            <span class="author-block">
+              <a href="https://thomas-tanay.github.io" target="_blank">Thomas Tanay<sup>1</sup></a>,</span>
+            <span class="author-block">
+              <a href="https://zhangzhensong.github.io" target="_blank">Zhensong Zhang<sup>1</sup></a>,</span>
+            <span class="author-block">
+              <a href="https://eecs.qmul.ac.uk/~gslabaugh" target="_blank">Gregory Slabaugh<sup>2</sup></a>,</span>
+            <span class="author-block">
+              <a href="https://perezpellitero.github.io" target="_blank">Eduardo Pérez-Pellitero<sup>1</sup></a></span>
+          </div>
+
+          <div class="is-size-6 publication-authors">
+            <span class="author-block">*equal contribution</span>
+          </div>
+          <div class="is-size-5 publication-authors">
+            <span class="author-block"><sup>1</sup>Huawei Noah's Ark London, <sup>2</sup>Queen Mary University of London</span>
+          </div>
+
+          <div class="column has-text-centered">
+            <div class="publication-links">
+              <!-- <span class="link-block">
+                <a href="." target="_blank"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="fas fa-file-pdf"></i>
+                  </span>
+                  <span>Paper</span>
+                </a>
+              </span> -->
+              <!-- <span class="link-block">
+                <a href="." target="_blank"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="fas fa-file-pdf"></i>
+                  </span>
+                  <span>Supplementary</span>
+                </a>
+              </span> -->
+              <span class="link-block">
+                <a href="https://arxiv.org/abs/2011.12948"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="ai ai-arxiv"></i>
+                  </span>
+                  <span>arXiv</span>
+                </a>
+              </span>
+              <!-- Video Link. -->
+              <!-- <span class="link-block">
+                <a href="https://youtube.com" target="_blank"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="fab fa-youtube"></i>
+                  </span>
+                  <span>Video</span>
+                </a>
+              </span> -->
+              <!-- <span class="link-block">
+                <a href="https://github.com"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="fab fa-github"></i>
+                  </span>
+                  <span>Code</span>
+                  </a>
+              </span> -->
+              <!-- <span class="link-block">
+                <a href="https://huggingface.co/charge-benchmark/Charge" target="_blank"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="far fa-images"></i>
+                  </span>
+                  <span>Data</span>
+                  </a>
+              </span> -->
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+
+<section class="hero teaser">
+  <div class="container is-max-desktop">
+    <div class="hero-body has-text-centered">
+      <img src="assets/images/teaser.webp"
+                 class="centre-img"
+                 alt="Interpolate start reference image."/>
+      <h2 class="subtitle has-text-centered">
+        <span class="dnerf">ViDAR</span> provides a novel framework for Monocular Novel View Synthesis utilising a diffusion-aware reconstruction framework.
+      </h2>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Abstract</h2>
+        <div class="content has-text-justified">
+          <p>
+            Dynamic Novel View Synthesis aims to generate photorealistic views of moving subjects from arbitrary viewpoints. This task is particularly challenging when relying on monocular video, where disentangling structure from motion is ill-posed and supervision is scarce. We introduce Video Diffusion-Aware Reconstruction (ViDAR), a novel 4D reconstruction framework that leverages personalised diffusion models to synthesise a pseudo multi-view supervision signal for training a Gaussian splatting representation. By conditioning on scene-specific features, ViDAR recovers fine-grained appearance details while mitigating artefacts introduced by monocular ambiguity. To address the spatio-temporal inconsistency of diffusion-based supervision, we propose a diffusion-aware loss function and a camera pose optimisation strategy that aligns synthetic views with the underlying scene geometry. Experiments on DyCheck, a challenging benchmark with extreme viewpoint variation, show that ViDAR outperforms all state-of-the-art baselines in visual quality and geometric consistency. We further highlight ViDAR’s strong improvement over baselines on dynamic regions and provide a new benchmark to compare performance in reconstructing motion-rich parts of the scene.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<section class="section">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-full-width">
+        <h2 class="title is-3">Method</h2>
+        <img src="assets/images/method.webp"
+                 class="centre-img"
+                 alt="Interpolate start reference image."/>
+        <div class="content has-text-justified">
+          <p>
+            We first train a monocular reconstruction baseline and generate a set of typically degraded multi-view images by sampling diverse camera poses and rendering the novel viewpoints. We then adopt a DreamBooth-style personalisation strategy, and tailor a pretrained diffusion model to the input video, which we use as a generative enhancer to inject rich visual information back into the degraded renders. This effectively generates a set of high-fidelity pseudo-multi-view observations for our scene, although due to the nature of the diffusion process, the resulting images are not necessarily spatially consistent. We observe that naively using these views as supervision leads to reconstructions degraded by artefacts and geometric inconsistencies. To mitigate this, we propose a method of diffusion-aware reconstruction, which selectively applies diffusion-based guidance to dynamic regions of the scene while jointly optimising the camera poses associated with the diffused views.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<section class="section">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered">
+      <div class="column is-full-width">
+        <h2 class="title is-3 has-text-centered" style="margin-top: -20px; margin-bottom: 20px;">Results</h2>
+        <p>
+          Below we show qualitative results of state-of-the-art methods against <span class="dnerf">ViDAR</span> on DyCheck iPhone dataset. Videos are in full resolution, compressed for loading time.
+        </p>
+
+        <div class="content has-text-justified" style="margin-top: 15px;">
+          <h3 class="title is-4 has-text-centered" style="margin-bottom: 10px;">Full resolution training</h3>
+        </div>
+
+        <div class="container">
+          <ul class="nav nav-tabs nav-fill nav-justified" id="full-res-scenes" style="margin-bottom: 10px;">
+              <li class="nav-item">
+                <a class="nav-link" id="full-res-apple" onclick="sceneChanger(this, 'vidFullCam1', 'apple'); sceneChanger(this, 'vidFullCam2', 'apple')">apple</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" id="full-res-block" onclick="sceneChanger(this, 'vidFullCam1', 'block'); sceneChanger(this, 'vidFullCam2', 'block')">block</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" id="full-res-paper-windmill" onclick="sceneChanger(this, 'vidFullCam1', 'paper-windmill'); sceneChanger(this, 'vidFullCam2', 'paper-windmill')">windmill</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" id="full-res-space-out" onclick="sceneChanger(this, 'vidFullCam1', 'space-out'); sceneChanger(this, 'vidFullCam2', 'space-out')">space-out</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" id="full-res-spin" onclick="sceneChanger(this, 'vidFullCam1', 'spin'); sceneChanger(this, 'vidFullCam2', 'spin')">spin</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link active" id="full-res-teddy" onclick="sceneChanger(this, 'vidFullCam1', 'teddy'); sceneChanger(this, 'vidFullCam2', 'teddy')">teddy</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" id="full-res-wheel" onclick="sceneChanger(this, 'vidFullCam1', 'wheel'); sceneChanger(this, 'vidFullCam2', 'wheel')">wheel</a>
+              </li>
+          </ul>
+          <ul class="nav nav-tabs nav-fill nav-justified" id="full-res-methods" style="margin-bottom: 10px;">
+            <li class="nav-item">
+              <a class="nav-link active" id="full-res-MoSca" onclick="methodChanger(this, 'vidFullCam1Merge', 0); methodChanger(this, 'vidFullCam2Merge', 0)">MoSca</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" id="full-res-SoM" onclick="methodChanger(this, 'vidFullCam1Merge', 1); methodChanger(this, 'vidFullCam2Merge', 1)">SoM</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" id="full-res-DGM" onclick="methodChanger(this, 'vidFullCam1Merge', 2); methodChanger(this, 'vidFullCam2Merge', 2)">DGM</a>
+            </li>
+          </ul>
+          <ul class="nav nav-tabs nav-fill nav-justified" id="full-res-toggle" style="margin-bottom: 10px;">
+            <li class="nav-item">
+              <a class="nav-link" id="full-res-base" onclick="maskChanger(this, 'vidFullCam1', 'base'); maskChanger(this, 'vidFullCam2', 'base')">Image</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link active" id="full-res-covis" onclick="maskChanger(this, 'vidFullCam1', 'covis'); maskChanger(this, 'vidFullCam2', 'covis')">Covisibility</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" id="full-res-dyn" onclick="maskChanger(this, 'vidFullCam1', 'dyn'); maskChanger(this, 'vidFullCam2', 'dyn')">Dynamic</a>
+            </li>
+          </ul>
+          <div class="row">
+            <div class="col-md-6 d-flex flex-column align-items-center">
+              <div class="video-container" style="width: 100%; position: relative; padding-top: 0%; margin-top: 0;">
+                <video class="video" id="vidFullCam1" loop="" playsinline="" autoplay="" muted="" src="assets/videos/full_res/teddy/cam_1_covis.webm" onplay="resizeAndPlayOffset(this, 3, 3)" style="width: 100%; height: 0px; position: absolute; top: 0px; left: 0px; object-fit: contain;"></video>
+              </div>
+              <canvas id="vidFullCam1Merge" class="videoMerge" style="display: block; width: 90%; margin-top: 5px; margin-left: auto; margin-right: auto;" width="2160" height="960" data-vidselection="0"></canvas>
+              <div class="row" style="width: 90%; justify-content: space-around">
+                <p class="has-text-centered col-xs-4 method-label" id="vidFullCam1Merge-caption">
+                  MoSca
+                </p>
+                <p class="has-text-centered col-xs-4 method-label">
+                  Ours
+                </p>
+                <p class="has-text-centered col-xs-4 method-label">
+                  GT
+                </p>
+              </div>
+              <!-- <div class="row" style="width: 90%; justify-content: space-evenly">
+                <button class="play-pause-button">
+                  <a class="play-pause-link" onclick="videoPlay('vidFullCam1')">⏵︎</a>
+                </button>
+                <button class="play-pause-button">
+                  <a class="play-pause-link" onclick="videoPause('vidFullCam1')">⏸︎</a>
+                </button>
+              </div> -->
+              <h2 class="subtitle has-text-centered">
+                Camera 1
+              </h2>
+              
+            </div>
+            
+            <div class="col-md-6 d-flex flex-column align-items-center">
+              <div class="video-container" style="width: 100%; position: relative; padding-top: 0%; margin-top: 0;">
+                <video class="video" id="vidFullCam2" loop="" playsinline="" autoplay="" muted="" src="assets/videos/full_res/teddy/cam_2_covis.webm" onplay="resizeAndPlayOffset(this, 3, 3)" style="width: 100%; height: 0px; position: absolute; top: 0px; left: 0px; object-fit: contain;"></video>
+              </div>
+              <canvas id="vidFullCam2Merge" class="videoMerge" style="display: block; width: 90%; margin-top: 5px; margin-left: auto; margin-right: auto;" width="2160" height="960" data-vidselection="0"></canvas>
+              <div class="row" style="width: 90%; justify-content: space-around">
+                <p class="has-text-centered col-xs-4 method-label" id="vidFullCam2Merge-caption">
+                  MoSca
+                </p>
+                <p class="has-text-centered col-xs-4 method-label">
+                  Ours
+                </p>
+                <p class="has-text-centered col-xs-4 method-label">
+                  GT
+                </p>
+              </div>
+              <h2 class="subtitle has-text-centered">
+                Camera 2
+              </h2>
+            </div>   
+          </div>
+        </div>
+
+        <div class="content has-text-justified" style="margin-top: 15px;">
+          <h3 class="title is-4 has-text-centered" style="margin-bottom: 10px;">Half resolution training</h3>
+        </div>
+
+        <div class="container">
+          <ul class="nav nav-tabs nav-fill nav-justified" id="half-res-scenes" style="margin-bottom: 10px;">
+              <li class="nav-item">
+                <a class="nav-link" id="half-res-apple" onclick="sceneChanger(this, 'vidHalfCam1', 'apple'); sceneChanger(this, 'vidHalfCam2', 'apple')">apple</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" id="half-res-block" onclick="sceneChanger(this, 'vidHalfCam1', 'block'); sceneChanger(this, 'vidHalfCam2', 'block')">block</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" id="half-res-paper-windmill" onclick="sceneChanger(this, 'vidHalfCam1', 'paper-windmill'); sceneChanger(this, 'vidHalfCam2', 'paper-windmill')">windmill</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" id="half-res-space-out" onclick="sceneChanger(this, 'vidHalfCam1', 'space-out'); sceneChanger(this, 'vidHalfCam2', 'space-out')">space-out</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" id="half-res-spin" onclick="sceneChanger(this, 'vidHalfCam1', 'spin'); sceneChanger(this, 'vidHalfCam2', 'spin')">spin</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link active" id="half-res-teddy" onclick="sceneChanger(this, 'vidHalfCam1', 'teddy'); sceneChanger(this, 'vidHalfCam2', 'teddy')">teddy</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" id="half-res-wheel" onclick="sceneChanger(this, 'vidHalfCam1', 'wheel'); sceneChanger(this, 'vidHalfCam2', 'wheel')">wheel</a>
+              </li>
+          </ul>
+          <ul class="nav nav-tabs nav-fill nav-justified" id="half-res-methods" style="margin-bottom: 10px;">
+            <li class="nav-item">
+              <a class="nav-link" id="half-res-T-NeRF" onclick="methodChanger(this, 'vidHalfCam1Merge', 0); methodChanger(this, 'vidHalfCam2Merge', 0)">T-NeRF</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" id="half-res-Nerfies" onclick="methodChanger(this, 'vidHalfCam1Merge', 1); methodChanger(this, 'vidHalfCam2Merge', 1)">Nerfies</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" id="half-res-HyperNeRF" onclick="methodChanger(this, 'vidHalfCam1Merge', 2); methodChanger(this, 'vidHalfCam2Merge', 2)">HyperNeRF</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" id="half-res-DGM" onclick="methodChanger(this, 'vidHalfCam1Merge', 3); methodChanger(this, 'vidHalfCam2Merge', 3)">DGM</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" id="half-res-SoM" onclick="methodChanger(this, 'vidHalfCam1Merge', 4); methodChanger(this, 'vidHalfCam2Merge', 4)">SoM</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link active" id="half-res-MoSca" onclick="methodChanger(this, 'vidHalfCam1Merge', 5); methodChanger(this, 'vidHalfCam2Merge', 5)">MoSca</a>
+            </li>
+          </ul>
+          <ul class="nav nav-tabs nav-fill nav-justified" id="half-res-toggle" style="margin-bottom: 10px;">
+            <li class="nav-item">
+              <a class="nav-link" id="half-res-base" onclick="maskChanger(this, 'vidHalfCam1', 'base'); maskChanger(this, 'vidHalfCam2', 'base')">Image</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link active" id="half-res-covis" onclick="maskChanger(this, 'vidHalfCam1', 'covis'); maskChanger(this, 'vidHalfCam2', 'covis')">Covisibility</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" id="half-res-dyn" onclick="maskChanger(this, 'vidHalfCam1', 'dyn'); maskChanger(this, 'vidHalfCam2', 'dyn')">Dynamic</a>
+            </li>
+          </ul>
+          <div class="row">
+            <div class="col-md-6 d-flex flex-column align-items-center">
+              <div class="video-container" style="width: 100%; position: relative; padding-top: 0%; margin-top: 0;">
+                <video class="video" id="vidHalfCam1" loop="" playsinline="" autoplay="" muted="" src="assets/videos/half_res/teddy/cam_1_covis.webm" onplay="resizeAndPlayOffset(this, 3, 6)" style="width: 100%; height: 0px; position: absolute; top: 0px; left: 0px; object-fit: contain;"></video>
+              </div>
+              <canvas id="vidHalfCam1Merge" class="videoMerge" style="display: block; width: 90%; margin-top: 5px; margin-left: auto; margin-right: auto;" width="2160" height="960" data-vidselection="5"></canvas>
+              <div class="row" style="width: 90%; justify-content: space-around">
+                <p class="has-text-centered col-xs-4 method-label" id="vidHalfCam1Merge-caption">
+                  MoSca
+                </p>
+                <p class="has-text-centered col-xs-4 method-label">
+                  Ours
+                </p>
+                <p class="has-text-centered col-xs-4 method-label">
+                  GT
+                </p>
+              </div>
+              <h2 class="subtitle has-text-centered">
+                Camera 1
+              </h2>
+            </div>
+            <div class="col-md-6 d-flex flex-column align-items-center">
+              <div class="video-container" style="width: 100%; position: relative; padding-top: 0%; margin-top: 0;">
+                <video class="video" id="vidHalfCam2" loop="" playsinline="" autoplay="" muted="" src="assets/videos/half_res/teddy/cam_2_covis.webm" onplay="resizeAndPlayOffset(this, 3, 6)" style="width: 100%; height: 0px; position: absolute; top: 0px; left: 0px; object-fit: contain;"></video>
+              </div>
+              <canvas id="vidHalfCam2Merge" class="videoMerge" style="display: block; width: 90%; margin-top: 5px; margin-left: auto; margin-right: auto;" width="2160" height="960" data-vidselection="5"></canvas>
+              <div class="row" style="width: 90%; justify-content: space-around">
+                <p class="has-text-centered col-xs-4 method-label" id="vidHalfCam2Merge-caption">
+                  MoSca
+                </p>
+                <p class="has-text-centered col-xs-4 method-label">
+                  Ours
+                </p>
+                <p class="has-text-centered col-xs-4 method-label">
+                  GT
+                </p>
+              </div>
+              <h2 class="subtitle has-text-centered">
+                Camera 2
+              </h2>
+            </div>   
+          </div>
+        </div>
+
+        <div class="content has-text-justified" style="margin-top: 15px;">
+          <h3 class="title is-4 has-text-centered" style="margin-bottom: 10px;">Ablation</h3>
+        </div>
+
+        <div class="container">
+          <ul class="nav nav-tabs nav-fill nav-justified" id="ablation-scenes" style="margin-bottom: 10px;">
+              <li class="nav-item">
+                <a class="nav-link" id="ablation-apple" onclick="sceneChanger(this, 'vidAblCam1', 'apple'); sceneChanger(this, 'vidAblCam2', 'apple')">apple</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" id="ablation-block" onclick="sceneChanger(this, 'vidAblCam1', 'block'); sceneChanger(this, 'vidAblCam2', 'block')">block</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" id="ablation-paper-windmill" onclick="sceneChanger(this, 'vidAblCam1', 'paper-windmill'); sceneChanger(this, 'vidAblCam2', 'paper-windmill')">windmill</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" id="ablation-space-out" onclick="sceneChanger(this, 'vidAblCam1', 'space-out'); sceneChanger(this, 'vidAblCam2', 'space-out')">space-out</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" id="ablation-spin" onclick="sceneChanger(this, 'vidAblCam1', 'spin'); sceneChanger(this, 'vidAblCam2', 'spin')">spin</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link active" id="ablation-teddy" onclick="sceneChanger(this, 'vidAblCam1', 'teddy'); sceneChanger(this, 'vidAblCam2', 'teddy')">teddy</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" id="ablation-wheel" onclick="sceneChanger(this, 'vidAblCam1', 'wheel'); sceneChanger(this, 'vidAblCam2', 'wheel')">wheel</a>
+              </li>
+          </ul>
+          <ul class="nav nav-tabs nav-fill nav-justified" id="ablation-methods" style="margin-bottom: 10px;">
+            <li class="nav-item">
+              <a class="nav-link" id="ablation-diffusion" onclick="methodChanger(this, 'vidAblCam1Merge', 0); methodChanger(this, 'vidAblCam2Merge', 0)">Diffusion</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link active" id="ablation-naive" onclick="methodChanger(this, 'vidAblCam1Merge', 1); methodChanger(this, 'vidAblCam2Merge', 1)">Naive</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" id="ablation-dr" onclick="methodChanger(this, 'vidAblCam1Merge', 2); methodChanger(this, 'vidAblCam2Merge', 2)">-DR</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" id="ablation-so" onclick="methodChanger(this, 'vidAblCam1Merge', 3); methodChanger(this, 'vidAblCam2Merge', 3)">-SO</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" id="ablation-tgs" onclick="methodChanger(this, 'vidAblCam1Merge', 4); methodChanger(this, 'vidAblCam2Merge', 4)">-TGS</a>
+            </li>
+          </ul>
+          <ul class="nav nav-tabs nav-fill nav-justified" id="ablation-toggle" style="margin-bottom: 10px;">
+            <li class="nav-item">
+              <a class="nav-link" id="ablation-base" onclick="maskChanger(this, 'vidAblCam1', 'base'); maskChanger(this, 'vidAblCam2', 'base')">Image</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link active" id="ablation-covis" onclick="maskChanger(this, 'vidAblCam1', 'covis'); maskChanger(this, 'vidAblCam2', 'covis')">Covisibility</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" id="ablation-dyn" onclick="maskChanger(this, 'vidAblCam1', 'dyn'); maskChanger(this, 'vidAblCam2', 'dyn')">Dynamic</a>
+            </li>
+          </ul>
+          <div class="row">
+            <div class="col-md-6 d-flex flex-column align-items-center">
+              <div class="video-container" style="width: 100%; position: relative; padding-top: 0%; margin-top: 0;">
+                <video class="video" id="vidAblCam1" loop="" playsinline="" autoplay="" muted="" src="assets/videos/ablation/teddy/cam_1_covis.webm" onplay="resizeAndPlayOffset(this, 3, 5)" style="width: 100%; height: 0px; position: absolute; top: 0px; left: 0px; object-fit: contain;"></video>
+              </div>
+              <canvas id="vidAblCam1Merge" class="videoMerge" style="display: block; width: 90%; margin-top: 5px; margin-left: auto; margin-right: auto;" width="2160" height="960" data-vidselection="1"></canvas>
+              <div class="row" style="width: 90%; justify-content: space-around">
+                <p class="has-text-centered col-xs-4 method-label" id="vidAblCam1Merge-caption">
+                  Naive
+                </p>
+                <p class="has-text-centered col-xs-4 method-label">
+                  Ours
+                </p>
+                <p class="has-text-centered col-xs-4 method-label">
+                  GT
+                </p>
+              </div>
+              <h2 class="subtitle has-text-centered">
+                Camera 1
+              </h2>
+            </div>
+            <div class="col-md-6 d-flex flex-column align-items-center">
+              <div class="video-container" style="width: 100%; position: relative; padding-top: 0%; margin-top: 0;">
+                <video class="video" id="vidAblCam2" loop="" playsinline="" autoplay="" muted="" src="assets/videos/ablation/teddy/cam_2_covis.webm" onplay="resizeAndPlayOffset(this, 3, 5)" style="width: 100%; height: 0px; position: absolute; top: 0px; left: 0px; object-fit: contain;"></video>
+              </div>
+              <canvas id="vidAblCam2Merge" class="videoMerge" style="display: block; width: 90%; margin-top: 5px; margin-left: auto; margin-right: auto;" width="2160" height="960" data-vidselection="1"></canvas>
+              <div class="row" style="width: 90%; justify-content: space-around">
+                <p class="has-text-centered col-xs-4 method-label" id="vidAblCam2Merge-caption">
+                  Naive
+                </p>
+                <p class="has-text-centered col-xs-4 method-label">
+                  Ours
+                </p>
+                <p class="has-text-centered col-xs-4 method-label">
+                  GT
+                </p>
+              </div>
+              <h2 class="subtitle has-text-centered">
+                Camera 2
+              </h2>
+            </div>   
+          </div>
+          <div class="content has-text-justified" style="margin-top: 15px;">
+            <p>
+              <b>Diffusion</b> shows direct outputs of the personalised diffusion model. <b>Naive</b> corresponds to directly using diffusion outputs as supervision. <b>-DR</b>, <b>-SO</b>, and <b>-TGS</b> show the effects of removing Dynamic Reconstruction, Sampled Camera Optimisation, or Tracking Based Gaussian Classification, respectively.
+            </p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+<section class="section" id="BibTeX">
+  <div class="container is-max-desktop content">
+    <h2 class="title">BibTeX</h2>
+    <pre><code>@article{nazarczuk2024vidar,
+  author    = {Nazarczuk, Michal and Catley-Chandar, Sibi and Tanay, Thomas and Zhang, Zhensong and Slabaugh, Gregory and Pérez-Pellitero, Eduardo},
+  title     = {{ViDAR: Video Diffusion-Aware 4D Reconstruction From Monocular Inputs}},
+  journal   = {#TODO},
+  year      = {2025},
+}</code></pre>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="container">
+    <div class="columns is-centered">
+      <div class="column is-8">
+        <div class="content">
+          <p>
+            This website is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/" target="_blank">CC BY-SA 4.0</a>.
+            This webpage template is from <a href="https://github.com/nerfies/nerfies.github.io" target="_blank">Nerfies</a>. 
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
